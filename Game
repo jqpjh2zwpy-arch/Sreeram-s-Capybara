@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Capybara Spider-Hero</title>
+  <style>
+    body { background:#111; color:#fff; font-family:sans-serif; text-align:center; }
+    #game { margin-top:40px; }
+    button { margin:5px; padding:10px 20px; }
+  </style>
+</head>
+<body>
+  <h1>Capybara Spider-Hero: Anime City Rescue</h1>
+  <div id="game">
+    <p id="status">Welcome, Sreeram! Press "Start Level 1".</p>
+    <button onclick="startLevel1()">Start Level 1</button>
+    <div id="challenge"></div>
+    <input id="answer" type="text" placeholder="Type your answer">
+    <button onclick="submitAnswer()">Submit</button>
+  </div>
+
+  <script>
+    let mode = null; // "grammar" or "math"
+    let currentQuestion = null;
+    let webEnergy = 0;
+
+    function startLevel1() {
+      document.getElementById('status').textContent =
+        "Broken Grammar Street – fix the sentence to move forward!";
+      mode = "grammar";
+      currentQuestion = {
+        broken: "the city is brokened please help capybara",
+        fixed: "The city is broken, please help the capybara."
+      };
+      document.getElementById('challenge').textContent =
+        "Fix this sentence: " + currentQuestion.broken;
+    }
+
+    function submitAnswer() {
+      const ans = document.getElementById('answer').value.trim();
+      if (mode === "grammar") {
+        if (ans === currentQuestion.fixed) {
+          document.getElementById('status').textContent =
+            "Nice! Gate opened. Now a math swing challenge!";
+          startMath();
+        } else {
+          document.getElementById('status').textContent =
+            "Not quite. Try fixing capitalization, tense, and punctuation.";
+        }
+      } else if (mode === "math") {
+        if (parseInt(ans) === currentQuestion.answer) {
+          webEnergy += 20;
+          document.getElementById('status').textContent =
+            "Correct! Web Energy: " + webEnergy;
+          if (webEnergy >= 100) {
+            document.getElementById('status').textContent =
+              "Web Energy full! Capy‑Spidey swings to the next building!";
+          } else {
+            startMath(); // next question
+          }
+        } else {
+          document.getElementById('status').textContent =
+            "Wrong answer. Try again!";
+        }
+      }
+      document.getElementById('answer').value = "";
+    }
+
+    function startMath() {
+      mode = "math";
+      // simple random math question
+      const a = Math.floor(Math.random() * 10) + 1;
+      const b = Math.floor(Math.random() * 10) + 1;
+      currentQuestion = { a, b, answer: a + b };
+      document.getElementById('challenge').textContent =
+        "Math question: " + a + " + " + b + " = ?";
+    }
+  </script>
+</body>
+</html>
